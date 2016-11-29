@@ -286,7 +286,9 @@ function hyvaksy_ennakko($parametrit) {
   if ($onnistuiko_toiminto) {
 
     $query = "UPDATE lasku
-              SET viesti = '{$viesti}'
+              SET viesti = '{$viesti}',
+                tila      = 'E',
+                alatila   = 'A'
               WHERE yhtio = '{$kukarow['yhtio']}'
               AND tunnus  = '{$valittu_tarjous_tunnus}'";
     pupe_query($query);
