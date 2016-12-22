@@ -37,6 +37,15 @@ if ($tee == "PAIVITA_AJAX") {
             and tuoteno     = '$tuoteno'";
   $result   = pupe_query($query);
 
+  $query = "UPDATE tuote SET
+            halytysraja = '$tilauspisteet',
+            status          = '$tilauspisteet',
+            muuttaja        = '$kukarow[kuka]',
+            muutospvm       = now()
+            WHERE yhtio     = '$kukarow[yhtio]'
+            and tuoteno     = '$tuoteno'";
+  $result   = pupe_query($query);
+
   echo json_encode('ok');
   exit;
 }
@@ -409,6 +418,7 @@ if ($tee == "RAPORTOI" and isset($ehdotusnappi)) {
       var tuoteno     = $(\"#tuoteno_\"+osat[1]).html();
       var toimittaja     = $(\"#toimittaja_\"+osat[1]).html();
       var varmuusvarastot  = $(\"#varmuusvarastot_\"+osat[1]).val();
+      var tilauspisteet  = $(\"#tilauspisteet_\"+osat[1]).val();
       var pakkauskoot   = $(\"#pakkauskoot_\"+osat[1]).val();
       var toimitusajat   = $(\"#toimitusajat_\"+osat[1]).val();
       var varastoitavat   = $(\"#varastoitavat_\"+osat[1]).val();
@@ -419,6 +429,7 @@ if ($tee == "RAPORTOI" and isset($ehdotusnappi)) {
           async: false,
           toimittaja: toimittaja,
           varmuusvarastot: varmuusvarastot,
+          tilauspisteet: tilauspisteet,
           pakkauskoot: pakkauskoot,
           toimitusajat: toimitusajat,
           varastoitavat: varastoitavat,
@@ -859,6 +870,7 @@ if ($tee == "RAPORTOI" and isset($ehdotusnappi)) {
 
         echo "<div id='$indeksi' style='display:none'><table>";
         echo "<tr><th>".t("Varmuusvarasto").":</th><td><input type='text' size='10' id = 'varmuusvarastot_$indeksi' name='varmuus_varastot[$row[tuoteno]]' value='".$row["varmuus_varasto"]."'></td></tr>";
+        echo "<tr><th>".t("Tilauspiste").":</th><td><input type='text' size='10' id = 'tilauspisteet_$indeksi' name='tilauspisteet[$row[tuoteno]]' value='".$row["halytysraja"]."'></td></tr>";
         echo "<tr><th>".t("Pakkauskoko").":</th><td><input type='text' size='10' id = 'pakkauskoot_$indeksi' name='pakkauskoot[$row[tuoteno]]' value='".(float) $toimirow["pakkauskoko"]."'></td></tr>";
         echo "<tr><th>".t("Toimitusaika").":</th><td><input type='text' size='10' id = 'toimitusajat_$indeksi' name='toimitusajat[$row[tuoteno]]' value='".(float) $toimirow["toimitusaika"]."'> ".t("pva").".</td></tr>";
         echo "<tr><th>".t("Varastoitava/status").":</th><td><select id = 'varastoitavat_$indeksi' name='varastoitavat[$row[tuoteno]]'>";
@@ -877,6 +889,8 @@ if ($tee == "RAPORTOI" and isset($ehdotusnappi)) {
 
           echo " ", t("Status"), " {$value}</option>";
         }
+
+        echo "<tr><th>".t("Näkyvyys").":</th><td><select id = 'nakyvyydet_$indeksi' name='nakyvyydet[$row[tuoteno]]'>";
 
         echo "</select></td>";
 
